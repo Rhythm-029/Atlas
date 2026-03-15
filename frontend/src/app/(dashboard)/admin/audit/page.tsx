@@ -39,9 +39,7 @@ export default function AdminAuditPage() {
       const response = await fetchWithAuth("/api/admin/audit/export");
       if (!response.ok) throw new Error("Failed to export logs");
       const data = await response.json();
-      const blob = new Blob([JSON.stringify(data, null, 2)], {
-        type: "application/json",
-      });
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -69,10 +67,7 @@ export default function AdminAuditPage() {
           <h1 className="text-2xl font-bold text-slate-900">Audit Logs</h1>
           <p className="text-slate-600 mt-1">System activity and security events</p>
         </div>
-        <button
-          onClick={handleExport}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-        >
+        <button onClick={handleExport} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
           Export Logs
         </button>
       </div>
@@ -106,25 +101,18 @@ export default function AdminAuditPage() {
             <tbody className="divide-y divide-slate-200">
               {logs.map((log) => (
                 <tr key={log.id} className="hover:bg-slate-50">
-                  <td className="px-6 py-4 text-sm text-slate-900 whitespace-nowrap">
-                    {new Date(log.timestamp).toLocaleString()}
-                  </td>
+                  <td className="px-6 py-4 text-sm text-slate-900 whitespace-nowrap">{new Date(log.timestamp).toLocaleString()}</td>
                   <td className="px-6 py-4">
-                    <span className="inline-flex px-2 py-1 text-xs font-mono rounded bg-slate-100 text-slate-800">
-                      {log.action}
-                    </span>
+                    <span className="inline-flex px-2 py-1 text-xs font-mono rounded bg-slate-100 text-slate-800">{log.action}</span>
                   </td>
                   <td className="px-6 py-4 text-sm text-slate-600">{log.user_id || "-"}</td>
                   <td className="px-6 py-4 text-sm text-slate-600 font-mono">{log.ip_address || "-"}</td>
-                  <td className="px-6 py-4 text-sm text-slate-600 max-w-md truncate" title={log.details}>
-                    {log.details}
-                  </td>
+                  <td className="px-6 py-4 text-sm text-slate-600 max-w-md truncate" title={log.details}>{log.details}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-
         {logs.length === 0 && (
           <div className="text-center py-12">
             <p className="text-slate-600">No audit logs found</p>

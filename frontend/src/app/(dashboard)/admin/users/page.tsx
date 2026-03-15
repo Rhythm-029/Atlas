@@ -50,11 +50,8 @@ export default function AdminUsersPage() {
 
   const handleApprove = async (userId: number) => {
     if (!confirm("Approve this user?")) return;
-    
     try {
-      const response = await fetchWithAuth(`/api/admin/users/${userId}/approve`, {
-        method: "POST",
-      });
+      const response = await fetchWithAuth(`/api/admin/users/${userId}/approve`, { method: "POST" });
       if (!response.ok) throw new Error("Failed to approve user");
       await loadUsers();
       await loadPendingUsers();
@@ -66,11 +63,8 @@ export default function AdminUsersPage() {
 
   const handleReject = async (userId: number) => {
     if (!confirm("Reject this user? This action cannot be undone.")) return;
-    
     try {
-      const response = await fetchWithAuth(`/api/admin/users/${userId}/reject`, {
-        method: "POST",
-      });
+      const response = await fetchWithAuth(`/api/admin/users/${userId}/reject`, { method: "POST" });
       if (!response.ok) throw new Error("Failed to reject user");
       await loadUsers();
       await loadPendingUsers();
@@ -101,9 +95,7 @@ export default function AdminUsersPage() {
         <button
           onClick={() => setActiveTab("all")}
           className={`px-4 py-2 font-medium transition-colors ${
-            activeTab === "all"
-              ? "text-blue-600 border-b-2 border-blue-600"
-              : "text-slate-600 hover:text-slate-900"
+            activeTab === "all" ? "text-blue-600 border-b-2 border-blue-600" : "text-slate-600 hover:text-slate-900"
           }`}
         >
           All Users ({users.length})
@@ -111,9 +103,7 @@ export default function AdminUsersPage() {
         <button
           onClick={() => setActiveTab("pending")}
           className={`px-4 py-2 font-medium transition-colors ${
-            activeTab === "pending"
-              ? "text-blue-600 border-b-2 border-blue-600"
-              : "text-slate-600 hover:text-slate-900"
+            activeTab === "pending" ? "text-blue-600 border-b-2 border-blue-600" : "text-slate-600 hover:text-slate-900"
           }`}
         >
           Pending Approval ({pendingUsers.length})
@@ -142,15 +132,11 @@ export default function AdminUsersPage() {
                     </span>
                   </td>
                   <td className="px-6 py-4">
-                    <span
-                      className={`inline-flex px-2 py-1 text-xs font-medium rounded ${
-                        user.status === "APPROVED"
-                          ? "bg-green-100 text-green-800"
-                          : user.status === "PENDING"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : "bg-red-100 text-red-800"
-                      }`}
-                    >
+                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded ${
+                      user.status === "APPROVED" ? "bg-green-100 text-green-800"
+                      : user.status === "PENDING" ? "bg-yellow-100 text-yellow-800"
+                      : "bg-red-100 text-red-800"
+                    }`}>
                       {user.status}
                     </span>
                   </td>
@@ -160,18 +146,8 @@ export default function AdminUsersPage() {
                   <td className="px-6 py-4 text-right space-x-2">
                     {user.status === "PENDING" && (
                       <>
-                        <button
-                          onClick={() => handleApprove(user.id)}
-                          className="px-3 py-1 text-sm font-medium text-green-700 hover:text-green-800 hover:bg-green-50 rounded transition-colors"
-                        >
-                          Approve
-                        </button>
-                        <button
-                          onClick={() => handleReject(user.id)}
-                          className="px-3 py-1 text-sm font-medium text-red-700 hover:text-red-800 hover:bg-red-50 rounded transition-colors"
-                        >
-                          Reject
-                        </button>
+                        <button onClick={() => handleApprove(user.id)} className="px-3 py-1 text-sm font-medium text-green-700 hover:text-green-800 hover:bg-green-50 rounded transition-colors">Approve</button>
+                        <button onClick={() => handleReject(user.id)} className="px-3 py-1 text-sm font-medium text-red-700 hover:text-red-800 hover:bg-red-50 rounded transition-colors">Reject</button>
                       </>
                     )}
                   </td>
@@ -180,7 +156,6 @@ export default function AdminUsersPage() {
             </tbody>
           </table>
         </div>
-
         {displayUsers.length === 0 && (
           <div className="text-center py-12">
             <p className="text-slate-600">No users found</p>
