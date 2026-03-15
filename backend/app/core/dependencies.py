@@ -1,10 +1,11 @@
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from app.core.database import get_db
 from app.core.security import decode_access_token
+from app.core.authz import authz_engine
 from app.models.user import User
 
 security = HTTPBearer(auto_error=False)
@@ -48,7 +49,21 @@ async def get_current_user(
     return user
 
 
+async def get_optional_user(
+    credentials: HTTPAuthorizationCredentials | None = Depends(security),
+    db: AsyncSession = Depends(get_db),
+) -> User | None:
+    """Get current user if authenticated, otherwise return None."""
+    if credentials is None:
+        return None
+    try:
+        return await get_current_user(credentials, db)
+    except HTTPException:
+        return None
+
+
 def require_role(*allowed_roles: str):
+    """DEPRECATED: Use authz engine instead."""
     async def role_checker(
         current_user: User = Depends(get_current_user),
     ) -> User:
@@ -60,3 +75,16 @@ def require_role(*allowed_roles: str):
         return current_user
 
     return role_checker
+
+
+async def check_authorization(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+) -> User:
+    """Check if user has permission using authz engine."""
+    authz_engine.require_permission(
+        path=request.url.path,
+        method=request.method,
+        user_role=current_user.role.value,
+    )
+    return current_user

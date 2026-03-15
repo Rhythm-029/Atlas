@@ -1,6 +1,8 @@
 from pydantic import BaseModel, EmailStr
+from datetime import datetime
+from typing import Optional
 
-from app.models.user import UserRole
+from app.models.user import UserRole, UserStatus
 
 
 class LoginRequest(BaseModel):
@@ -23,7 +25,15 @@ class UserResponse(BaseModel):
     id: int
     email: str
     role: UserRole
+    status: UserStatus
     is_active: bool
+    created_at: datetime
+    approved_at: Optional[datetime] = None
+    approved_by: Optional[int] = None
 
     class Config:
         from_attributes = True
+
+
+class UserApprovalRequest(BaseModel):
+    reason: Optional[str] = None

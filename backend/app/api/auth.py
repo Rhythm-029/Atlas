@@ -5,7 +5,8 @@ from sqlalchemy import select
 
 from app.core.database import get_db
 from app.core.security import verify_password, get_password_hash, create_access_token
-from app.models.user import User
+from app.core.config import settings
+from app.models.user import User, UserStatus
 from app.schemas.user_schema import LoginRequest, RegisterRequest, TokenResponse
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -22,6 +23,16 @@ async def login(
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password",
+        )
+    if user.status == UserStatus.PENDING:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Your account is pending approval. Please contact an administrator.",
+        )
+    if user.status == UserStatus.REJECTED:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Your account has been rejected. Please contact an administrator.",
         )
     if not user.is_active:
         raise HTTPException(
@@ -43,13 +54,34 @@ async def register(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email already registered",
         )
+    
+    # Check if email domain is in approved list
+    email_domain = body.email.split("@")[1]
+    approved_domains = [d.strip() for d in settings.approved_email_domains.split(",") if d.strip()]
+    
+    if email_domain in approved_domains:
+        user_status = UserStatus.APPROVED
+        is_active = True
+    else:
+        user_status = UserStatus.PENDING
+        is_active = False
+    
     user = User(
         email=body.email,
         hashed_password=get_password_hash(body.password),
         role=body.role,
+        status=user_status,
+        is_active=is_active,
     )
     db.add(user)
     await db.flush()
     await db.refresh(user)
+    
+    if user_status == UserStatus.PENDING:
+        raise HTTPException(
+            status_code=status.HTTP_202_ACCEPTED,
+            detail="Registration successful. Your account is pending approval.",
+        )
+    
     access_token = create_access_token(data={"sub": str(user.id)})
     return TokenResponse(access_token=access_token)

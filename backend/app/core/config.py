@@ -9,12 +9,27 @@ class Settings(BaseSettings):
     )
 
     app_name: str = "Atlas AI Command Center"
+    app_env: str = "development"
+    log_level: str = "INFO"
     debug: bool = False
 
     database_url: str = "postgresql+asyncpg://atlas:atlas_secret@localhost:5432/atlas_db"
     secret_key: str = "change-me-in-production"
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
+    
+    storage_backend: str = "local"
+    gcs_bucket_name: str = ""
+    
+    gemini_api_key: str = ""
+    ai_model: str = "gemini-2.0-flash-exp"
+    
+    approved_email_domains: str = "atlasuniversity.edu.in"
+    
+    keycloak_server_url: str = ""
+    keycloak_realm: str = "atlas"
+    keycloak_client_id: str = "atlas-backend"
+    keycloak_client_secret: str = ""
 
 
 settings = Settings()
