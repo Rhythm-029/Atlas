@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { fetchWithAuth } from "@/lib/api";
 
 interface AuditLog {
   id: number;
@@ -22,7 +23,7 @@ export default function AdminAuditPage() {
 
   const loadLogs = async () => {
     try {
-      const response = await fetch(`/api/admin/audit?limit=${limit}`);
+      const response = await fetchWithAuth(`/api/admin/audit?limit=${limit}`);
       if (!response.ok) throw new Error("Failed to load audit logs");
       const data = await response.json();
       setLogs(data.logs);
@@ -35,7 +36,7 @@ export default function AdminAuditPage() {
 
   const handleExport = async () => {
     try {
-      const response = await fetch("/api/admin/audit/export");
+      const response = await fetchWithAuth("/api/admin/audit/export");
       if (!response.ok) throw new Error("Failed to export logs");
       const data = await response.json();
       const blob = new Blob([JSON.stringify(data, null, 2)], {

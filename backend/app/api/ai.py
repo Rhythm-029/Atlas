@@ -4,9 +4,7 @@ from sqlalchemy import select, desc
 from typing import List
 
 from app.core.database import get_db
-from app.core.dependencies import get_current_user
-from app.models.user import User
-from app.models.policy import Policy, PolicyStatus
+from app.models.policy import Policy
 from app.schemas.ai_schema import (
     PolicyCreate,
     PolicyUpdate,
@@ -25,7 +23,6 @@ router = APIRouter(prefix="/ai", tags=["ai"])
 
 @router.get("/policies", response_model=List[PolicyResponse])
 async def get_policies(
-    current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     """Get all policies."""
@@ -39,7 +36,6 @@ async def get_policies(
 @router.post("/policies", response_model=PolicyResponse)
 async def create_policy(
     policy_data: PolicyCreate,
-    current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     """Create a new policy."""
@@ -50,7 +46,6 @@ async def create_policy(
         natural_language=policy_data.natural_language,
         dsl=policy_data.dsl,
         priority=policy_data.priority,
-        created_by=current_user.id,
     )
     db.add(policy)
     await db.commit()
@@ -61,19 +56,15 @@ async def create_policy(
 @router.get("/policies/{policy_id}", response_model=PolicyResponse)
 async def get_policy(
     policy_id: int,
-    current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     """Get a specific policy."""
     result = await db.execute(select(Policy).where(Policy.id == policy_id))
     policy = result.scalar_one_or_none()
-    
+
     if not policy:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Policy not found"
-        )
-    
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Policy not found")
+
     return policy
 
 
@@ -81,22 +72,18 @@ async def get_policy(
 async def update_policy(
     policy_id: int,
     policy_data: PolicyUpdate,
-    current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     """Update a policy."""
     result = await db.execute(select(Policy).where(Policy.id == policy_id))
     policy = result.scalar_one_or_none()
-    
+
     if not policy:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Policy not found"
-        )
-    
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Policy not found")
+
     for field, value in policy_data.model_dump(exclude_unset=True).items():
         setattr(policy, field, value)
-    
+
     await db.commit()
     await db.refresh(policy)
     return policy
@@ -105,19 +92,15 @@ async def update_policy(
 @router.delete("/policies/{policy_id}")
 async def delete_policy(
     policy_id: int,
-    current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
     """Delete a policy."""
     result = await db.execute(select(Policy).where(Policy.id == policy_id))
     policy = result.scalar_one_or_none()
-    
+
     if not policy:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Policy not found"
-        )
-    
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Policy not found")
+
     await db.delete(policy)
     await db.commit()
     return {"message": "Policy deleted successfully"}
@@ -126,12 +109,11 @@ async def delete_policy(
 @router.post("/policies/translate")
 async def translate_policy(
     request: PolicyTranslateRequest,
-    current_user: User = Depends(get_current_user),
 ):
     """Translate natural language policy to DSL."""
     dsl = await policy_service.translate_policy(request.natural_language)
     validation = await policy_service.validate_policy(dsl)
-    
+
     return {
         "natural_language": request.natural_language,
         "dsl": dsl,
@@ -140,9 +122,7 @@ async def translate_policy(
 
 
 @router.get("/insights", response_model=List[InsightResponse])
-async def get_insights(
-    current_user: User = Depends(get_current_user),
-):
+async def get_insights():
     """Get AI-generated insights."""
     system_data = {
         "user_count": 127,
@@ -152,15 +132,13 @@ async def get_insights(
         "error_rate_percent": 0.8,
         "database_size_gb": 12.4,
     }
-    
+
     insights = await insights_service.generate_insights(system_data)
     return insights
 
 
 @router.post("/insights/generate")
-async def generate_insights(
-    current_user: User = Depends(get_current_user),
-):
+async def generate_insights():
     """Trigger manual insights generation."""
     system_data = {
         "user_count": 127,
@@ -169,7 +147,7 @@ async def generate_insights(
         "avg_response_time_ms": 245,
         "error_rate_percent": 0.8,
     }
-    
+
     insights = await insights_service.generate_insights(system_data)
     return {"message": "Insights generated successfully", "insights": insights}
 
@@ -177,16 +155,15 @@ async def generate_insights(
 @router.post("/chat", response_model=ChatResponse)
 async def chat(
     request: ChatRequest,
-    current_user: User = Depends(get_current_user),
 ):
     """Chat with AI Manager."""
     messages = [{"role": msg.role, "content": msg.content} for msg in request.messages]
-    
+
     response = await chat_service.chat(
         messages=messages,
-        user_email=current_user.email,
-        user_role=current_user.role.value,
+        user_email="user@atlas.local",
+        user_role="ADMIN",
         current_page=request.current_page,
     )
-    
+
     return response

@@ -1,6 +1,6 @@
 # Atlas AI Command Center - Quick Start Guide
 
-All features from the Supervity AI Command Center template have been successfully added to your codebase!
+All features from the Atlas Skilltech University template have been successfully added to your codebase!
 
 ## What Was Added
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { fetchWithAuth } from "@/lib/api";
 
 interface Policy {
   id: number;
@@ -32,7 +33,7 @@ export default function AIPoliciesPage() {
 
   const loadPolicies = async () => {
     try {
-      const response = await fetch("/api/ai/policies");
+      const response = await fetchWithAuth("/api/ai/policies");
       if (!response.ok) throw new Error("Failed to load policies");
       const data = await response.json();
       setPolicies(data);
@@ -48,7 +49,7 @@ export default function AIPoliciesPage() {
     
     setTranslating(true);
     try {
-      const response = await fetch("/api/ai/policies/translate", {
+      const response = await fetchWithAuth("/api/ai/policies/translate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,7 +71,7 @@ export default function AIPoliciesPage() {
     if (!newPolicy.name.trim() || !translatedDSL) return;
     
     try {
-      const response = await fetch("/api/ai/policies", {
+      const response = await fetchWithAuth("/api/ai/policies", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

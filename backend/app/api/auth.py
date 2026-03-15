@@ -56,8 +56,14 @@ async def register(
         )
     
     # Check if email domain is in approved list
-    email_domain = body.email.split("@")[1]
-    approved_domains = [d.strip() for d in settings.approved_email_domains.split(",") if d.strip()]
+    parts = body.email.strip().split("@")
+    if len(parts) != 2 or not parts[1]:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid email format",
+        )
+    email_domain = parts[1].lower()
+    approved_domains = [d.strip().lower() for d in settings.approved_email_domains.split(",") if d.strip()]
     
     if email_domain in approved_domains:
         user_status = UserStatus.APPROVED

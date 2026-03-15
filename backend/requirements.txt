@@ -1,6 +1,7 @@
 # Atlas AI Command Center Backend - Python 3.11+
 fastapi==0.109.2
 uvicorn[standard]==0.27.1
+gunicorn==21.2.0
 sqlalchemy[asyncio]==2.0.25
 asyncpg==0.29.0
 alembic==1.13.1

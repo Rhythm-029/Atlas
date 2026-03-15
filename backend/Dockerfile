@@ -2,11 +2,7 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
+# No system deps needed: psycopg2-binary and asyncpg use pre-built wheels
 
 # Copy requirements first for better layer caching
 COPY requirements.txt .

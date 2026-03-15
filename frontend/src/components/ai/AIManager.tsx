@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import ReactMarkdown from "react-markdown";
+import { fetchWithAuth } from "@/lib/api";
 
 interface Message {
   role: "user" | "assistant";
@@ -30,7 +31,7 @@ export default function AIManager({ isOpen, onClose }: AIManagerProps) {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/ai/chat", {
+      const response = await fetchWithAuth("/api/ai/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

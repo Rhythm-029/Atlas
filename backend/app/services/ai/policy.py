@@ -25,7 +25,7 @@ Respond with ONLY the DSL, no explanation."""
     async def translate_policy(self, natural_language: str) -> str:
         """Translate natural language policy to DSL."""
         if not gemini_client.is_available():
-            return "# Gemini API not configured - using placeholder DSL\nuser.role == 'ADMIN'"
+            return "# Set GEMINI_API_KEY for natural-language translation. Fallback:\nuser.role == 'ADMIN'"
 
         prompt = self.TRANSLATION_PROMPT.format(policy=natural_language)
         dsl = await gemini_client.generate_text(

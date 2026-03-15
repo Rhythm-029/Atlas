@@ -1,9 +1,36 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+
+function LogoFallback({ size }: { size: number }) {
+  return (
+    <div
+      className="shrink-0 rounded bg-white/10 flex items-center justify-center font-bold text-white text-xs"
+      style={{ width: size, height: size }}
+    >
+      A
+    </div>
+  );
+}
+
+function LogoImage({ collapsed }: { collapsed: boolean }) {
+  const [failed, setFailed] = useState(false);
+  const size = collapsed ? 32 : 36;
+  if (failed) return <LogoFallback size={size} />;
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/logo.png"
+      alt="Atlas Skilltech University"
+      width={size}
+      height={size}
+      className="shrink-0 rounded object-contain"
+      onError={() => setFailed(true)}
+    />
+  );
+}
 
 const navItems = [
   { href: "/", label: "Dashboard", icon: DashboardIcon },
@@ -88,13 +115,7 @@ export default function Sidebar() {
     >
       <div className={`flex items-center h-16 border-b border-white/10 shrink-0 ${collapsed ? "px-2" : "px-4"}`}>
         <Link href="/" className={`flex items-center gap-2 min-w-0 flex-1 ${collapsed ? "justify-center" : ""}`}>
-          <Image
-            src="/logo.png"
-            alt="Atlas Skilltech University"
-            width={collapsed ? 32 : 36}
-            height={collapsed ? 32 : 36}
-            className="shrink-0 rounded object-contain"
-          />
+          <LogoImage collapsed={collapsed} />
           {!collapsed && <span className="font-semibold text-sm truncate">ATLAS SKILLTECH</span>}
         </Link>
         <button

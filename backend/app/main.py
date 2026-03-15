@@ -11,6 +11,11 @@ from app.middleware.audit import AuditLoggingMiddleware
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    if settings.secret_key == "change-me-in-production":
+        import logging
+        logging.getLogger("uvicorn.error").warning(
+            "SECRET_KEY is default; set a secure value in production (e.g. openssl rand -base64 32)"
+        )
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     yield
@@ -26,12 +31,15 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
+# Explicit origins when using credentials (browsers reject credentials + "*")
+_origins = [o.strip() for o in settings.cors_origins.split(",") if o.strip()]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 app.add_middleware(AuditLoggingMiddleware)

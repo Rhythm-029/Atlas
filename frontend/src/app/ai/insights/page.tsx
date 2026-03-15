@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { fetchWithAuth } from "@/lib/api";
 
 interface Insight {
   title: string;
@@ -22,7 +23,7 @@ export default function AIInsightsPage() {
 
   const loadInsights = async () => {
     try {
-      const response = await fetch("/api/ai/insights");
+      const response = await fetchWithAuth("/api/ai/insights");
       if (!response.ok) throw new Error("Failed to load insights");
       const data = await response.json();
       setInsights(data);
@@ -36,7 +37,7 @@ export default function AIInsightsPage() {
   const handleGenerate = async () => {
     setGenerating(true);
     try {
-      const response = await fetch("/api/ai/insights/generate", {
+      const response = await fetchWithAuth("/api/ai/insights/generate", {
         method: "POST",
       });
       if (!response.ok) throw new Error("Failed to generate insights");

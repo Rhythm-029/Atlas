@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { fetchWithAuth } from "@/lib/api";
 
 interface User {
   id: number;
@@ -25,7 +26,7 @@ export default function AdminUsersPage() {
 
   const loadUsers = async () => {
     try {
-      const response = await fetch("/api/admin/users");
+      const response = await fetchWithAuth("/api/admin/users");
       if (!response.ok) throw new Error("Failed to load users");
       const data = await response.json();
       setUsers(data);
@@ -38,7 +39,7 @@ export default function AdminUsersPage() {
 
   const loadPendingUsers = async () => {
     try {
-      const response = await fetch("/api/admin/users/pending");
+      const response = await fetchWithAuth("/api/admin/users/pending");
       if (!response.ok) throw new Error("Failed to load pending users");
       const data = await response.json();
       setPendingUsers(data);
@@ -51,7 +52,7 @@ export default function AdminUsersPage() {
     if (!confirm("Approve this user?")) return;
     
     try {
-      const response = await fetch(`/api/admin/users/${userId}/approve`, {
+      const response = await fetchWithAuth(`/api/admin/users/${userId}/approve`, {
         method: "POST",
       });
       if (!response.ok) throw new Error("Failed to approve user");
@@ -67,7 +68,7 @@ export default function AdminUsersPage() {
     if (!confirm("Reject this user? This action cannot be undone.")) return;
     
     try {
-      const response = await fetch(`/api/admin/users/${userId}/reject`, {
+      const response = await fetchWithAuth(`/api/admin/users/${userId}/reject`, {
         method: "POST",
       });
       if (!response.ok) throw new Error("Failed to reject user");

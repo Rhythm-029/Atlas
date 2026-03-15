@@ -1,18 +1,24 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8001";
+export const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8001";
+
+/**
+ * Fetch helper — points all calls at the backend API base.
+ * No auth token is attached (open access mode).
+ */
+export async function fetchWithAuth(
+  path: string,
+  options: RequestInit = {}
+): Promise<Response> {
+  const url = path.startsWith("http") ? path : `${API_BASE}${path}`;
+  const headers = new Headers(options.headers);
+  if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json");
+  return fetch(url, { ...options, headers });
+}
 
 export async function api<T>(
   path: string,
-  options?: RequestInit & { token?: string }
+  options: RequestInit = {}
 ): Promise<T> {
-  const { token, ...init } = options ?? {};
-  const headers: HeadersInit = {
-    "Content-Type": "application/json",
-    ...(init.headers as Record<string, string>),
-  };
-  if (token) {
-    (headers as Record<string, string>)["Authorization"] = `Bearer ${token}`;
-  }
-  const res = await fetch(`${API_BASE}${path}`, { ...init, headers });
+  const res = await fetchWithAuth(path, options);
   if (!res.ok) {
     const errorText = await res.text().catch(() => res.statusText);
     throw new Error(errorText);
