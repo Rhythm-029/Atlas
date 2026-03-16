@@ -56,12 +56,12 @@ make up
 This will start:
 - PostgreSQL (port 5432)
 - Keycloak (port 8080)
-- Backend API (port 8001)
-- Frontend (port 3001)
+- Backend API (port 8000)
+- Frontend (port 3000)
 
 ### 5. Access the Application
-- **Frontend**: http://localhost:3001
-- **Backend API Docs**: http://localhost:8001/docs
+- **Frontend**: http://localhost:3000
+- **Backend API Docs**: http://localhost:8000/docs
 - **Keycloak Admin**: http://localhost:8080 (admin/admin)
 
 ### 6. Default Admin Login
@@ -111,8 +111,8 @@ make shell-db        # Open PostgreSQL shell
 
 ### Ports
 Default ports can be changed in `.env`:
-- `FRONTEND_PORT=3001`
-- `BACKEND_PORT=8001`
+- `FRONTEND_PORT=3000`
+- `BACKEND_PORT=8000`
 - `DB_PORT=5432`
 - `KEYCLOAK_PORT=8080`
 

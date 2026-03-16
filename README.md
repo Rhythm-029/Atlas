@@ -110,8 +110,8 @@ This starts PostgreSQL, Keycloak (optional), Backend (FastAPI), and Frontend (Ne
 
 | Service | URL | Description |
 |---------|-----|-------------|
-| 🌐 Frontend | http://localhost:3001 | Main application |
-| 📡 Backend API | http://localhost:8001/docs | Swagger API docs |
+| 🌐 Frontend | http://localhost:3000 | Main application |
+| 📡 Backend API | http://localhost:8000/docs | Swagger API docs |
 | 🔐 Keycloak Admin | http://localhost:8080 | Identity management (if enabled) |
 
 **Default admin login** (after running migrations):
@@ -135,7 +135,7 @@ This starts PostgreSQL, Keycloak (optional), Backend (FastAPI), and Frontend (Ne
 
 | Issue | Solution |
 |-------|----------|
-| Port 3001/8001 in use | Stop other services or change ports in `.env` |
+| Port 3000/8000 in use | Stop other services or change ports in `.env` |
 | Login returns 401 | Ensure NEXTAUTH_SECRET is set; clear cookies or use incognito |
 | AI features not working | Check GEMINI_API_KEY is set in `.env` |
 | Containers won't start | Run `docker compose down -v` then `make up` |
@@ -228,17 +228,17 @@ The `.env` file is organized into Backend and Frontend sections.
 |----------|---------|-------------|
 | NODE_ENV | development | Next.js environment mode |
 | FRONTEND_TARGET | dev | Docker build target: dev or prod |
-| NEXT_PUBLIC_API_URL | http://localhost:8001 | Backend API URL (browser) |
+| NEXT_PUBLIC_API_URL | http://localhost:8000 | Backend API URL (browser) |
 | NEXT_PUBLIC_BASE_PATH | (empty) | Base path for reverse proxy |
 | NEXTAUTH_SECRET | (required) | Secret for NextAuth.js; use `openssl rand -base64 32` |
-| NEXTAUTH_URL | http://localhost:3001 | App URL for NextAuth |
+| NEXTAUTH_URL | http://localhost:3000 | App URL for NextAuth |
 
 ### Ports (optional overrides)
 
 | Variable | Default |
 |----------|---------|
-| FRONTEND_PORT | 3001 |
-| BACKEND_PORT | 8001 |
+| FRONTEND_PORT | 3000 |
+| BACKEND_PORT | 8000 |
 | DB_PORT | 5432 |
 | KEYCLOAK_PORT | 8080 |
 
