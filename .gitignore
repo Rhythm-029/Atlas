@@ -38,3 +38,30 @@ npm-debug.log*
 
 # Generated / data
 digest.txt
+
+# Sensitive credentials
+*.pem
+*.key
+*.pfx
+*.p12
+*.jks
+credentials.json
+token.json
+.credentials/
+
+# API keys and secrets
+**/secrets/
+**/private/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Docker compose local overrides
+docker-compose.override.yml
+docker-compose.local.yml
+
+# Local development
+.env.local.production
+.env.production.local

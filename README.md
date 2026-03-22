@@ -1,148 +1,60 @@
-# Atlas AI Command Center - Full-Stack Template
+# 🎓 Atlas AI Command Center - Campus Event Manager
 
-A production-ready template for building modern, AI-first web applications with Python/FastAPI backend, Next.js/React frontend, Keycloak for identity management, and integrated AI features (Gemini).
+An **AI-powered event management system** built on the ATLAS template for managing campus events with intelligent approval workflows, clash detection, and AI-enhanced event descriptions using Google Gemini.
 
 ---
 
-## 🚨 For New Client Projects - Read This First!
+## 🚨 Project Overview
 
-When starting a new project from this template, understand what's real functionality vs demo/placeholder:
+This project extends the Atlas AI Command Center template with a **fully functional Campus Event Manager** module. It features intelligent event request handling, automated conflict detection, and AI-powered text enhancement.
 
-### What's Real (Production-Ready)
+### ✨ What's Built
 
 | Component | Description |
 |-----------|-------------|
-| **Authentication** | Credentials-based login with NextAuth.js; optional OAuth2/OIDC with Keycloak |
-| **Authorization Engine** | JSON-based RBAC via `authz.map.json` and `authz.py` |
-| **User Registration** | Self-registration with domain-based auto-approval or admin approval |
-| **Admin User Management** | `/admin/users` - Approve/reject pending users |
-| **Event Manager** | `/events` - Submit and approve Smart Campus event requests |
-| **Audit Logging** | `/admin/audit` - Automatic request logging + custom events with export |
-| **AI Policies** | `/ai/policies` - Natural language rule engine with DSL translation |
-| **AI Insights** | `/ai/insights` - Proactive analysis and recommendations |
-| **AI Manager** | Global chatbot modal - Agentic assistant with tool execution |
-| **AI Polish** | `/events` - One-click enhancement of text using Gemini |
-| **Database Setup** | PostgreSQL with Alembic migrations |
-| **API Structure** | FastAPI with dependency injection |
-| **Session Management** | NextAuth.js with JWT token handling |
-| **Agents & Telemetry** | Agent registry and telemetry API endpoints |
+| **Event Submission** | Students and staff submit event requests via `/events` |
+| **Clash Detection** | Automatic detection of date/time/venue conflicts |
+| **AI Polish** | One-click Gemini enhancement for event descriptions |
+| **Event Approvals** | Admin review and approval workflow at `/events/approvals` |
+| **Audit Logging** | Complete audit trail of all events and approvals |
+| **Real-time Dashboard** | Live event stats, pending approvals, and recent events |
 
-### What's Demo (Replace for Production)
+### ✅ What's Real (Production-Ready)
 
-| Page | Location | Action Required |
-|------|----------|-----------------|
-| **Dashboard** | `/` (page.tsx) | Replace mock stats with real data |
-| **Settings** | `/settings` | Implement real settings functionality |
-| **AI Manager tools** | Backend `services/ai/tools.py` | Wire to real system APIs |
+| Feature | Status | Description |
+|---------|--------|-------------|
+| **Event Submission Form** | ✅ Real | Full event creation with date, time, venue, attendees |
+| **Approval Workflow** | ✅ Real | Admin review and reject/approve functionality |
+| **Clash Detection** | ✅ Real | Prevents double-booking of venues and times |
+| **AI Polish** | ✅ Real | Gemini integration for description enhancement |
+| **Audit Logging** | ✅ Real | Automatic tracking of all event operations |
+| **Authentication** | ✅ Real | JWT + optional Keycloak |
 
 ---
 
 ## ✨ Core Features
 
-- **Production-Ready Stack**: FastAPI, Next.js, PostgreSQL, and Keycloak (optional)
-- **Smart Campus Event Manager**: End-to-end event requesting and approval workflow with clash detection
-- **AI-Powered Editing**: "AI Polish" quickly refines user input into professional copy
-- **AI Integration**: Policies, Insights, and AI Manager with Gemini
-- **Pluggable Authorization Engine**: Endpoint-level access control in JSON
-- **User Self-Registration**: With domain-based auto-approval or admin approval
-- **Comprehensive Audit Logging**: Automatic request logging + custom business events
-- **Fully Containerized**: Docker and Docker Compose
-- **Cloud-Ready**: Structure supports deployment to Google Cloud Run with Cloud SQL
+- **Smart Campus Event Manager**: End-to-end event requesting, approval, and clash detection
+- **AI-Powered Enhancement**: "AI Polish" refines event descriptions using Gemini  
+- **Role-Based Access**: Students submit, admins approve/manage all events
+- **Audit Logging**: Comprehensive tracking of all event operations
+- **Real-time Dashboard**: Live event stats and pending approvals
+- **Fully Containerized**: Docker and Docker Compose setup
+- **Production-Ready Stack**: FastAPI, Next.js, PostgreSQL
 
 ---
 
-## 💻 Technology Stack
+## 📡 API Endpoints
 
-| Area | Technology | Purpose |
-|------|------------|---------|
-| Backend | Python 3.11 + FastAPI | High-performance API |
-| Frontend | Next.js 14+ + React + TypeScript | Modern UI framework |
-| AI | Gemini API | Policies, Insights, Chatbot |
-| Identity | Keycloak 24 (optional) | Centralized IAM; local JWT also supported |
-| Database | PostgreSQL 15 | Application data |
-| DevOps | Docker + Docker Compose | Containerization |
-
----
-
-## 🚀 Quick Start
-
-Get the Atlas AI Command Center running locally in under 5 minutes.
-
-### Prerequisites
-
-| Tool | Required | Purpose |
-|------|----------|---------|
-| Docker Desktop | ✅ Yes | Runs all services |
-| make | ✅ Yes | Dev commands (built-in on macOS/Linux; use WSL or Git Bash on Windows) |
-| Google Cloud SDK | ❌ Optional | For cloud deployment |
-
-### Step 1: Clone & Setup
-
-```bash
-git clone https://github.com/your-org/your-repo.git
-cd your-repo
-
-# Create your environment file
-cp .env.example .env
-```
-
-### Step 2: Configure Secrets
-
-Edit `.env` and set these required values:
-
-```bash
-# REQUIRED: Generate and paste this secret
-openssl rand -base64 32
-# Copy the output and set: NEXTAUTH_SECRET=<paste-here>
-# Also set: SECRET_KEY=<paste-here> (can be same or different)
-```
-
-**OPTIONAL but RECOMMENDED**: Enable AI features
-
-- Get your API key from: https://aistudio.google.com/apikey  
-- Set in `.env`: `GEMINI_API_KEY=your-api-key-here`
-
-### Step 3: Start Everything
-
-```bash
-make up
-```
-
-This starts PostgreSQL, Keycloak (optional), Backend (FastAPI), and Frontend (Next.js).
-
-### Step 4: Access the App
-
-| Service | URL | Description |
-|---------|-----|-------------|
-| 🌐 Frontend | http://localhost:3000 | Main application |
-| 📡 Backend API | http://localhost:8000/docs | Swagger API docs |
-| 🔐 Keycloak Admin | http://localhost:8080 | Identity management (if enabled) |
-
-**Default admin login** (after running migrations):
-
-- Email: `admin@atlasuniversity.edu.in`  
-- Password: `admin123`
-
-### Useful Commands
-
-| Command | Description |
-|---------|-------------|
-| `make up` | Start all services |
-| `make down` | Stop all services |
-| `make logs-be` | View backend logs |
-| `make logs-fe` | View frontend logs |
-| `make restart-be` | Restart backend only |
-| `make migrate-up` | Apply database migrations |
-| `make migrate-history` | View migration history |
-
-### Troubleshooting Quick Start
-
-| Issue | Solution |
-|-------|----------|
-| Port 3000/8000 in use | Stop other services or change ports in `.env` |
-| Login returns 401 | Ensure NEXTAUTH_SECRET is set; clear cookies or use incognito |
-| AI features not working | Check GEMINI_API_KEY is set in `.env` |
-| Containers won't start | Run `docker compose down -v` then `make up` |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/events` | Submit new event |
+| GET | `/api/events` | Get all events |
+| GET | `/api/events/{id}` | Get event details |
+| POST | `/api/events/{id}/polish-description` | AI enhance description |
+| GET | `/api/events/pending-approvals` | Get unapproved events (admin) |
+| PATCH | `/api/events/{id}/approve` | Approve event (admin) |
+| PATCH | `/api/events/{id}/reject` | Reject event (admin) |
 
 ---
 
@@ -150,193 +62,175 @@ This starts PostgreSQL, Keycloak (optional), Backend (FastAPI), and Frontend (Ne
 
 ```
 .
-├── backend/                    # FastAPI Backend
-│   ├── app/
-│   │   ├── main.py             # API routes and app bootstrap
-│   │   ├── authz.map.json     # Authorization rules (EDIT THIS)
-│   │   ├── public.map.json    # Public endpoints list
-│   │   ├── core/
-│   │   │   ├── authz.py       # Authorization engine
-│   │   │   ├── config.py      # Settings
-│   │   │   ├── database.py    # DB connection
-│   │   │   └── security.py    # JWT / password hashing
-│   │   ├── api/
-│   │   │   ├── auth.py        # Login / register
-│   │   │   ├── users.py       # /users/me
-│   │   │   ├── admin.py       # Admin users & audit
-│   │   │   ├── ai.py          # AI endpoints (policies, insights, chat)
-│   │   │   ├── agents.py      # Agent registry
-│   │   │   └── telemetry.py   # Telemetry
-│   │   ├── models/            # SQLAlchemy ORM models
-│   │   ├── schemas/           # Pydantic schemas
-│   │   ├── services/
-│   │   │   ├── audit.py       # Audit logging service
-│   │   │   ├── keycloak.py    # Keycloak JWT validation
-│   │   │   ├── keycloak_admin.py  # Keycloak Admin API
-│   │   │   └── ai/            # AI services
-│   │   │       ├── chat.py    # AI Manager chat logic
-│   │   │       ├── gemini.py  # Gemini API client
-│   │   │       ├── policy.py  # Policy translation
-│   │   │       ├── insights.py # Insights generation
-│   │   │       └── tools.py   # AI function tools
-│   │   └── middleware/
-│   │       └── audit.py       # Request audit middleware
-│   ├── alembic/               # Database migrations
-│   ├── Dockerfile
-│   └── requirements.txt
+├── backend/
+│   └── app/
+│       ├── api/
+│       │   └── events.py                # Event endpoints
+│       ├── models/
+│       │   └── event.py                 # Event database model
+│       ├── schemas/
+│       │   └── event_schema.py          # Data validation
+│       └── services/
+│           └── ai/
+│               ├── gemini.py            # Gemini API client
+│               └── tools.py             # AI helper functions
 │
-├── frontend/                  # Next.js Frontend
+├── frontend/
 │   └── src/
-│       ├── app/
-│       │   ├── (dashboard)/    # Protected dashboard pages
-│       │   ├── admin/         # Admin pages (users, audit)
-│       │   ├── ai/            # AI pages (policies, insights)
-│       │   └── auth/          # Login, register, error
-│       ├── components/
-│       │   ├── ai/            # AIManager chatbot
-│       │   ├── auth/          # AuthProvider
-│       │   └── layout/        # Header, Sidebar
-│       ├── lib/               # api.ts, store, utils
-│       ├── middleware.ts     # Auth middleware
-│       └── types/            # next-auth.d.ts
+│       ├── app/(dashboard)/
+│       │   └── events/
+│       │       ├── page.tsx             # Event submission form
+│       │       └── approvals/page.tsx  # Admin approval dashboard
+│       └── components/layout/
+│           └── Sidebar.tsx              # Navigation
 │
-├── docker-compose.yml         # Local development
-├── Makefile                   # Dev commands
-├── .env.example               # Environment template
-└── README.md                  # This file
+├── docker-compose.yml
+├── .env.example
+└── README.md
 ```
+
+---
+
+## 💻 Technology Stack
+
+| Area | Technology | Purpose |
+|------|------------|---------|
+| Backend | Python 3.11 + FastAPI | High-performance event API |
+| Frontend | Next.js 14+ + React + TypeScript | Modern event management UI |
+| AI | Gemini API | AI Polish for event descriptions |
+| Database | PostgreSQL 15 | Event storage and audit logs |
+| Auth | JWT + Keycloak (optional) | Secure authentication |
+| DevOps | Docker + Docker Compose | Full containerization |
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+| Tool | Required | Purpose |
+|------|----------|---------|
+| Docker Desktop | ✅ Yes | Runs all services |
+| Gemini API Key | ✅ Yes | AI Polish feature |
+| Git | ✅ Yes | Clone repository |
+
+Get your free Gemini API key: https://aistudio.google.com/apikey
+
+### Step 1: Clone & Setup
+
+```bash
+git clone https://github.com/Rhythm-029/Atlas.git
+cd Atlas
+cp .env.example .env
+```
+
+### Step 2: Configure Environment
+
+Edit `.env` and add your Gemini API key:
+
+```bash
+GEMINI_API_KEY=your-api-key-here
+SECRET_KEY=your-generated-secret-key
+NEXTAUTH_SECRET=your-generated-nextauth-secret
+```
+
+### Step 3: Start Services
+
+```bash
+docker compose up --build
+```
+
+### Step 4: Access the App
+
+| Service | URL |
+|---------|-----|
+| Frontend | http://localhost:3000 |
+| API Docs | http://localhost:8000/docs |
+| Keycloak (optional) | http://localhost:8080 |
+
+**Default Login**: `admin@atlasuniversity.edu.in` / `admin123`
+
+### Step 5: Try It Out
+
+1. Go to `/events` → Submit an event
+2. Click "✨ AI Polish" to enhance description with Gemini
+3. Visit `/events/approvals` (admin) to approve/reject events
+4. System auto-detects scheduling conflicts
 
 ---
 
 ## 📝 Environment Variables
 
-The `.env` file is organized into Backend and Frontend sections.
-
-### Backend Configuration
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| APP_ENV | development | Environment: development or production |
-| LOG_LEVEL | INFO | Logging level: DEBUG, INFO, WARNING, ERROR |
-| DATABASE_URL | (composed) | PostgreSQL connection string |
-| SECRET_KEY | (required) | JWT signing key; use `openssl rand -base64 32` |
-| STORAGE_BACKEND | local | File storage: local or gcs |
-| GEMINI_API_KEY | (empty) | API key for AI features |
-| AI_MODEL | gemini-2.0-flash-exp | AI model name |
-| APPROVED_EMAIL_DOMAINS | atlasuniversity.edu.in | Comma-separated domains for auto-approval |
-| KEYCLOAK_* | (empty) | Keycloak URL, realm, client ID/secret if using Keycloak |
-
-### Frontend Configuration
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| NODE_ENV | development | Next.js environment mode |
-| FRONTEND_TARGET | dev | Docker build target: dev or prod |
-| NEXT_PUBLIC_API_URL | http://localhost:8000 | Backend API URL (browser) |
-| NEXT_PUBLIC_BASE_PATH | (empty) | Base path for reverse proxy |
-| NEXTAUTH_SECRET | (required) | Secret for NextAuth.js; use `openssl rand -base64 32` |
-| NEXTAUTH_URL | http://localhost:3000 | App URL for NextAuth |
-
-### Ports (optional overrides)
-
-| Variable | Default |
-|----------|---------|
-| FRONTEND_PORT | 3000 |
-| BACKEND_PORT | 8000 |
-| DB_PORT | 5432 |
-| KEYCLOAK_PORT | 8080 |
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `GEMINI_API_KEY` | ✅ Yes | Google Gemini API key for AI Polish |
+| `DATABASE_URL` | ✅ Yes | PostgreSQL connection string |
+| `SECRET_KEY` | ✅ Yes | JWT signing key (use `openssl rand -base64 32`) |
+| `NEXTAUTH_SECRET` | ✅ Yes | NextAuth.js session secret |
 
 ---
 
-## 🤖 AI Features
+## ⚠️ Troubleshooting
 
-### AI Policies (`/ai/policies`)
-
-Define business rules in natural language. The AI translates them into executable logic.
-
-- Natural language rule input  
-- Automatic translation to logical DSL  
-- Support for both logical (DSL) and natural language policies  
-- Policy hierarchy with priority ordering  
-- Conflict detection and validation  
-
-### AI Insights (`/ai/insights`)
-
-Proactive analysis and recommendations based on system data.
-
-- Automated pattern detection  
-- Anomaly identification  
-- Severity-based prioritization (Critical, Warning, Recommendation)  
-- Suggested actions with estimated impact  
-
-### AI Manager (Global Chatbot)
-
-Accessible from any page via the header (🤖 button). Opens as a centered modal with blurred backdrop.
-
-- Context-aware (knows current page)  
-- Tool execution (function calling & log queries)  
-- Assists with Event Manager flows and approvals
-- Markdown rendering in responses  
-- Keyboard shortcut: Enter to send  
+| Problem | Solution |
+|---------|----------|
+| Port 3000/8000 in use | Change in `.env` or kill process |
+| "GEMINI_API_KEY not set" | Verify key in `.env` file |
+| Login fails | Clear cookies, check NEXTAUTH_SECRET |
+| Database errors | `docker compose down -v && docker compose up --build` |
+| Frontend not updating | `docker compose restart frontend` |
 
 ---
 
-## 📅 Smart Campus Event Manager
-A fully integrated, multi-role workflow designed exclusively for university campuses.
-
-| Feature | Role Access | Description |
-|---------|-------------|-------------|
-| **Event Submission** | All Users | Submit new campus events with date, time, and club details. |
-| **AI Polish** | All Users | Click a button to have Gemini instantly enhance your event description. |
-| **Event Approvals** | Faculty/Admin | Dedicated dashboard to review, approve, or reject event requests. |
-| **Conflict Detection** | System | Automatically prevents scheduling conflicts for the same club within a 2-hour window. |
-| **Integrated AI Manager** | All Users | The global Chatbot seamlessly tracks audit logs regarding event approvals. |
-
----
-
-## 🛠️ Make Commands
-
-| Command | Description |
-|---------|-------------|
-| make up | Start all services |
-| make down | Stop all services |
-| make logs | View all logs |
-| make logs-be | View backend logs |
-| make logs-fe | View frontend logs |
-| make logs-keycloak | View Keycloak logs |
-| make restart-be | Restart backend |
-| make restart-fe | Restart frontend |
-| make format | Format all code |
-| make lint | Lint all code |
-| make test-be | Run backend tests |
-| make migrate-up | Apply database migrations |
-| make migrate-down | Rollback one migration |
-| make migrate-create MSG='...' | Create new migration |
-| make migrate-history | View migration history |
-| make shell-be | Open backend shell |
-| make shell-fe | Open frontend shell |
-| make shell-db | Open database shell (psql) |
-| make clean | Stop and remove volumes |
-
----
-
-## 🗄️ Database Migrations
-
-Alembic migrations manage schema. Apply them after starting the stack:
+## 🛠️ Useful Commands
 
 ```bash
-# View current migration status
-make migrate-history
+# View logs
+docker compose logs -f backend
 
-# Create a new migration (from repo root)
-make migrate-create MSG='add_new_table'
+# Stop services
+docker compose down
 
-# Apply pending migrations
-make migrate-up
+# Reset everything
+docker compose down -v
+docker compose up --build
 
-# Rollback one migration
-make migrate-down
+# Run migrations
+docker compose exec backend alembic upgrade head
 ```
+
+---
+
+## 📖 Documentation
+
+- **API Docs**: http://localhost:8000/docs (Swagger UI)
+- **Database Migrations**: `backend/alembic/versions/`
+- **Authorization**: `backend/app/authz.map.json`
+
+---
+
+## 🤝 Contributing
+
+To contribute to this project:
+
+1. Create feature branch: `git checkout -b feature/your-feature`
+2. Commit changes: `git commit -m "Add feature"`
+3. Push and create Pull Request
+
+---
+
+## 🏆 Built By
+
+**Rhythm** — Campus Event Manager Implementation  
+Developed as part of the Atlas AI Command Center ecosystem  
+2026
+
+---
+
+## 📄 License
+
+Built on [Atlas AI Command Center Template](https://github.com/Rhythm-029/Atlas)  
+A production-ready full-stack framework for AI-powered applications
 
 ---
 
