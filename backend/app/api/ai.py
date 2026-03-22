@@ -14,6 +14,14 @@ from app.schemas.ai_schema import (
     ChatRequest,
     ChatResponse,
 )
+from pydantic import BaseModel
+
+class PolishRequest(BaseModel):
+    text: str
+
+class PolishResponse(BaseModel):
+    polished_text: str
+
 from app.services.ai.policy import policy_service
 from app.services.ai.insights import insights_service
 from app.services.ai.chat import chat_service
@@ -167,3 +175,20 @@ async def chat(
     )
 
     return response
+
+@router.post("/polish", response_model=PolishResponse)
+async def polish_text(request: PolishRequest):
+    """Polish the given text using AI."""
+    from app.services.ai.gemini import gemini_client
+    
+    if not gemini_client.is_available() or not request.text:
+        return {"polished_text": request.text + "\n\n(AI unavailable: Please configure GEMINI_API_KEY in the backend to enable AI Polish)"}
+    
+    prompt = f"Please improve and polish the following event description to make it more professional, grammatically correct, and engaging. Return ONLY the polished text without any additional commentary:\n\n{request.text}"
+    
+    try:
+        polished = await gemini_client.generate_text(prompt)
+        return {"polished_text": polished.strip()}
+    except Exception as e:
+        return {"polished_text": request.text + f"\n\n(AI Error: {str(e)})"}
+

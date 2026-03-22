@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.core.database import engine, Base
-from app.api import auth, users, agents, telemetry, admin, ai
+from app.api import auth, users, agents, telemetry, admin, ai, events
 from app.middleware.audit import AuditLoggingMiddleware
 
 
@@ -50,6 +50,7 @@ app.include_router(agents.router, prefix="/api")
 app.include_router(telemetry.router, prefix="/api")
 app.include_router(admin.router, prefix="/api")
 app.include_router(ai.router, prefix="/api")
+app.include_router(events.router, prefix="/api")
 
 
 @app.get("/health")

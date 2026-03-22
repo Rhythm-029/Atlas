@@ -24,8 +24,8 @@ def _resolve_gitingest_command():
     if cli_path:
         return [cli_path]
 
-    if importlib.util.find_spec("gitingest.cli") is not None:
-        return [sys.executable, "-m", "gitingest.cli"]
+    if importlib.util.find_spec("gitingest") is not None:
+        return [sys.executable, "-m", "gitingest"]
 
     return None
 

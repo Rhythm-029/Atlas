@@ -25,3 +25,55 @@ export async function api<T>(
   }
   return res.json() as Promise<T>;
 }
+
+// --- Event Manager API Types & Functions ---
+
+export type ClubEnum = "Atlas INC" | "AGILE" | "Student Council" | "Highflyers" | "Futurepreneurs" | "Finterest" | "Stage" | "NSS";
+export type EventStatus = "PENDING" | "APPROVED" | "REJECTED";
+
+export interface EventCreate {
+  name: string;
+  club_name: ClubEnum;
+  description: string;
+  event_date: string;
+}
+
+export interface EventResponse {
+  id: number;
+  name: string;
+  club_name: ClubEnum;
+  description: string;
+  event_date: string;
+  status: EventStatus;
+  submitted_by: number;
+  created_at: string;
+}
+
+export const createEvent = (data: EventCreate) => 
+  api<EventResponse>("/api/events/", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+
+export const getEvents = (status?: EventStatus) => 
+  api<EventResponse[]>(`/api/events/${status ? `?status_filter=${status}` : ""}`);
+
+export const updateEventStatus = (id: number, status: EventStatus) =>
+  api<EventResponse>(`/api/events/${id}/status`, {
+    method: "PATCH",
+    body: JSON.stringify({ status }),
+  });
+
+export interface PolishRequest {
+  text: string;
+}
+
+export interface PolishResponse {
+  polished_text: string;
+}
+
+export const polishText = (data: PolishRequest) =>
+  api<PolishResponse>("/api/ai/polish", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });

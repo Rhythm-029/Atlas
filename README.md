@@ -16,10 +16,12 @@ When starting a new project from this template, understand what's real functiona
 | **Authorization Engine** | JSON-based RBAC via `authz.map.json` and `authz.py` |
 | **User Registration** | Self-registration with domain-based auto-approval or admin approval |
 | **Admin User Management** | `/admin/users` - Approve/reject pending users |
+| **Event Manager** | `/events` - Submit and approve Smart Campus event requests |
 | **Audit Logging** | `/admin/audit` - Automatic request logging + custom events with export |
 | **AI Policies** | `/ai/policies` - Natural language rule engine with DSL translation |
 | **AI Insights** | `/ai/insights` - Proactive analysis and recommendations |
 | **AI Manager** | Global chatbot modal - Agentic assistant with tool execution |
+| **AI Polish** | `/events` - One-click enhancement of text using Gemini |
 | **Database Setup** | PostgreSQL with Alembic migrations |
 | **API Structure** | FastAPI with dependency injection |
 | **Session Management** | NextAuth.js with JWT token handling |
@@ -38,6 +40,8 @@ When starting a new project from this template, understand what's real functiona
 ## ✨ Core Features
 
 - **Production-Ready Stack**: FastAPI, Next.js, PostgreSQL, and Keycloak (optional)
+- **Smart Campus Event Manager**: End-to-end event requesting and approval workflow with clash detection
+- **AI-Powered Editing**: "AI Polish" quickly refines user input into professional copy
 - **AI Integration**: Policies, Insights, and AI Manager with Gemini
 - **Pluggable Authorization Engine**: Endpoint-level access control in JSON
 - **User Self-Registration**: With domain-based auto-approval or admin approval
@@ -270,9 +274,23 @@ Proactive analysis and recommendations based on system data.
 Accessible from any page via the header (🤖 button). Opens as a centered modal with blurred backdrop.
 
 - Context-aware (knows current page)  
-- Tool execution (function calling)  
+- Tool execution (function calling & log queries)  
+- Assists with Event Manager flows and approvals
 - Markdown rendering in responses  
 - Keyboard shortcut: Enter to send  
+
+---
+
+## 📅 Smart Campus Event Manager
+A fully integrated, multi-role workflow designed exclusively for university campuses.
+
+| Feature | Role Access | Description |
+|---------|-------------|-------------|
+| **Event Submission** | All Users | Submit new campus events with date, time, and club details. |
+| **AI Polish** | All Users | Click a button to have Gemini instantly enhance your event description. |
+| **Event Approvals** | Faculty/Admin | Dedicated dashboard to review, approve, or reject event requests. |
+| **Conflict Detection** | System | Automatically prevents scheduling conflicts for the same club within a 2-hour window. |
+| **Integrated AI Manager** | All Users | The global Chatbot seamlessly tracks audit logs regarding event approvals. |
 
 ---
 

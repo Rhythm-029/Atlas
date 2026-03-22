@@ -67,10 +67,15 @@ class GeminiClient:
             model_config["tools"] = tools
 
         model = genai.GenerativeModel(**model_config)
-        chat = model.start_chat()
-
+        
+        gemini_history = []
         for msg in messages[:-1]:
-            await chat.send_message_async(msg["content"])
+            role = "user" if msg["role"] == "user" else "model"
+            # Ensure we deal with strings
+            content = msg.get("content", "") or ""
+            gemini_history.append({"role": role, "parts": [content]})
+            
+        chat = model.start_chat(history=gemini_history)
 
         response = await chat.send_message_async(messages[-1]["content"])
         
@@ -81,10 +86,11 @@ class GeminiClient:
 
         if hasattr(response, "candidates") and response.candidates:
             for part in response.candidates[0].content.parts:
-                if hasattr(part, "function_call"):
+                if hasattr(part, "function_call") and part.function_call.name:
+                    args = part.function_call.args
                     result["function_calls"].append({
                         "name": part.function_call.name,
-                        "args": dict(part.function_call.args),
+                        "args": dict(args) if args else {},
                     })
 
         return result
